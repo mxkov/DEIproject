@@ -1,4 +1,5 @@
 import io
+import os
 import zipfile
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,13 +20,15 @@ enddate   = "2022-12-31"
 
 valid_stations = {}
 valid_files = {}
+outdir = "exploratory"
+os.makedirs(outdir, exist_ok=True)
 
 for data_id in ("tn", "tx"):
 	print(f"\nProcessing: {data_id}")
 
-	zip_file  = f"data/ECA_blend_{data_id}.zip"
-	fls_file  = f"filelist_{data_id}.txt"
-	plt_file  = f"stations_{data_id}.png"
+	zip_file  = os.path.join("data", f"ECA_blend_{data_id}.zip")
+	fls_file  = os.path.join(outdir, f"filelist_{data_id}.txt")
+	plt_file  = os.path.join(outdir, f"stations_{data_id}.png")
 
 	valid_stations[data_id] = []
 	valid_files[data_id] = []
@@ -85,7 +88,7 @@ valid_stations_common = set(valid_stations["tn"]) & set(valid_stations["tx"])
 valid_stations_common = sorted(list(valid_stations_common))
 valid_stations_common = [str(x) for x in valid_stations_common]
 print(f"\nCommon valid stations: {len(valid_stations_common)}")
-sts_file = "stations_valid.txt"
+sts_file = os.path.join(outdir, "stations_valid.txt")
 f = open(sts_file, "w")
 f.write("\n".join(valid_stations_common))
 f.close()

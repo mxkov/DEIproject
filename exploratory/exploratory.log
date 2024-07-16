@@ -1,0 +1,17 @@
+
+Processing: tn
+Total files: 7295
+Processing file 7295
+Valid stations: 2321
+List of valid files saved to exploratory/filelist_tn.txt
+Histogram saved to exploratory/stations_tn.png
+
+Processing: tx
+Total files: 7254
+Processing file 7254
+Valid stations: 2272
+List of valid files saved to exploratory/filelist_tx.txt
+Histogram saved to exploratory/stations_tx.png
+
+Common valid stations: 2266
+List saved to exploratory/stations_valid.txt
