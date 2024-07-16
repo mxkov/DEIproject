@@ -14,12 +14,11 @@ def convert_latitude(x):
 	return res
 
 
-# VALID stations:
-# TX: 2272
-# TN: 2321
-
 startdate = "1980-01-01"
 enddate   = "2022-12-31"
+
+valid_stations = {}
+valid_files = {}
 
 for data_id in ("tn", "tx"):
 	print(f"\nProcessing: {data_id}")
@@ -28,8 +27,8 @@ for data_id in ("tn", "tx"):
 	fls_file  = f"filelist_{data_id}.txt"
 	plt_file  = f"stations_{data_id}.png"
 
-	valid_stations = []
-	valid_files_list = []
+	valid_stations[data_id] = []
+	valid_files[data_id] = []
 
 	# in spark, just decompress the dir. 6 GB each.
 	zf = zipfile.ZipFile(zip_file)
@@ -37,7 +36,7 @@ for data_id in ("tn", "tx"):
 	print(f"Total files: {len(files)}")
 
 	for i,file in enumerate(files):
-		print(f"Processing file {i}", end="\r")
+		print(f"Processing file {i+1}", end="\r")
 		f = io.TextIOWrapper(zf.open(file))
 		lines = f.read().split("\n")[20:]
 		assert lines[0].startswith("STAID, SOUID,    DATE,")
@@ -55,13 +54,13 @@ for data_id in ("tn", "tx"):
 			continue
 		station = data.STAID.unique()
 		assert len(station)==1, f"{file}: {station}"
-		valid_stations.append(station[0])
-		valid_files_list.append(file)
+		valid_stations[data_id].append(station[0])
+		valid_files[data_id].append(file)
 
-	print(f"\nValid stations: {len(valid_files_list)}")
+	print(f"\nValid stations: {len(valid_stations[data_id])}")
 
 	f = open(fls_file, "w")
-	f.write("\n".join(valid_files_list))
+	f.write("\n".join(valid_files[data_id]))
 	f.close()
 	print(f"List of valid files saved to {fls_file}")
 
@@ -70,7 +69,7 @@ for data_id in ("tn", "tx"):
 	lines = [lines[17]] + lines[19:]
 	sts = pd.read_csv(io.StringIO("\n".join(lines)))
 	sts.columns = [x.strip() for x in sts.columns]
-	sts = sts[sts.STAID.isin(valid_stations)]
+	sts = sts[sts.STAID.isin(valid_stations[data_id])]
 
 	sts.LAT = sts.LAT.apply(convert_latitude)
 	plt.hist(sts.LAT, bins=30)
@@ -80,3 +79,14 @@ for data_id in ("tn", "tx"):
 	plt.savefig(plt_file, bbox_inches="tight")
 	plt.close()
 	print(f"Histogram saved to {plt_file}")
+
+
+valid_stations_common = set(valid_stations["tn"]) & set(valid_stations["tx"])
+valid_stations_common = sorted(list(valid_stations_common))
+valid_stations_common = [str(x) for x in valid_stations_common]
+print(f"\nCommon valid stations: {len(valid_stations_common)}")
+sts_file = "stations_valid.txt"
+f = open(sts_file, "w")
+f.write("\n".join(valid_stations_common))
+f.close()
+print(f"List saved to {sts_file}")
