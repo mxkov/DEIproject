@@ -16,19 +16,23 @@ def convert_latitude(x):
 
 
 startdate = "1980-01-01"
-enddate   = "2022-12-31"
+enddate   = "2024-05-31"
 
 valid_stations = {}
 valid_files = {}
 outdir = "exploratory"
 os.makedirs(outdir, exist_ok=True)
 
-for data_id in ("tn", "tx"):
+fig, ax = plt.subplots(ncols=2, sharex=True, sharey=True, figsize=(10, 4))
+plt_title = {"tn": "Daily minimum temperature",
+             "tx": "Daily maximum temperature"}
+plt_file = os.path.join(outdir, "stations.png")
+
+for j, data_id in enumerate(("tn", "tx")):
 	print(f"\nProcessing: {data_id}")
 
 	zip_file  = os.path.join("data", f"ECA_blend_{data_id}.zip")
 	fls_file  = os.path.join(outdir, f"filelist_{data_id}.txt")
-	plt_file  = os.path.join(outdir, f"stations_{data_id}.png")
 
 	valid_stations[data_id] = []
 	valid_files[data_id] = []
@@ -73,17 +77,20 @@ for data_id in ("tn", "tx"):
 	sts = pd.read_csv(io.StringIO("\n".join(lines)))
 	sts.columns = [x.strip() for x in sts.columns]
 	sts = sts[sts.STAID.isin(valid_stations[data_id])]
-
 	sts.LAT = sts.LAT.apply(convert_latitude)
-	plt.hist(sts.LAT, bins=30)
-	plt.xlabel("Latitude")
-	plt.ylabel("Stations")
-	plt.grid()
-	plt.savefig(plt_file, bbox_inches="tight")
-	plt.close()
-	print(f"Histogram saved to {plt_file}")
+
+	ax[j].hist(sts.LAT, bins=25)
+	ax[j].set_xlabel("Latitude, degrees")
+	ax[j].set_ylabel("Number of stations")
+	ax[j].grid()
+	ax[j].set_title(plt_title[data_id])
 
 	zf.close()
+
+ax[1].tick_params(axis="y", left=True, labelleft=True)
+plt.savefig(plt_file, dpi=300, bbox_inches="tight")
+plt.close()
+print(f"\nHistogram saved to {plt_file}")
 
 
 valid_stations_common = set(valid_stations["tn"]) & set(valid_stations["tx"])
