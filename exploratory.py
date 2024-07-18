@@ -83,6 +83,8 @@ for data_id in ("tn", "tx"):
 	plt.close()
 	print(f"Histogram saved to {plt_file}")
 
+	zf.close()
+
 
 valid_stations_common = set(valid_stations["tn"]) & set(valid_stations["tx"])
 valid_stations_common = sorted(list(valid_stations_common))
