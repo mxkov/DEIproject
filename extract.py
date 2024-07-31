@@ -1,4 +1,5 @@
 import os, sys
+import pandas as pd
 import zipfile
 
 
@@ -7,10 +8,8 @@ if len(sys.argv) < 2:
 extract_root = sys.argv[1]
 os.makedirs(extract_root, exist_ok=True)
 
-f = open("exploratory/stations_valid.txt")
-stations = f.read().strip().split("\n")
-f.close()
-stations = [int(x) for x in stations]
+stations = pd.read_csv("exploratory/station_data.txt", usecols=[0])
+stations = list(stations.STAID)
 
 for data_id in ("tn", "tx"):
 	print(f"\nExtracting {data_id}")

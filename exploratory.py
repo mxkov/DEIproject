@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from math import floor
 
 
-def convert_latitude(x):
-	"""Convert latitude from degrees:minutes:seconds to degrees with decimals"""
+def convert_coord(x):
+	"""Convert latitude or longitude from degrees:minutes:seconds to degrees with decimals"""
 	x1 = x[1:].split(":")
 	x1 = [int(val) for val in x1]
 	res = x1[0] + x1[1]/60 + x1[2]/3600
@@ -20,6 +20,7 @@ enddate   = "2024-05-31"
 
 valid_stations = {}
 valid_files = {}
+station_data = {}
 outdir = "exploratory"
 os.makedirs(outdir, exist_ok=True)
 
@@ -77,7 +78,13 @@ for j, data_id in enumerate(("tn", "tx")):
 	sts = pd.read_csv(io.StringIO("\n".join(lines)))
 	sts.columns = [x.strip() for x in sts.columns]
 	sts = sts[sts.STAID.isin(valid_stations[data_id])]
-	sts.LAT = sts.LAT.apply(convert_latitude)
+	for col in ["STANAME", "CN"]:
+		sts[col] = sts[col].apply(lambda x: x.strip())
+	for col in ["LAT", "LON"]:
+		sts[col] = sts[col].apply(convert_coord).astype("float")
+	sts = sts.round(6)
+	sts.HGHT = sts.HGHT.astype("int")
+	station_data[data_id] = sts.copy(deep=True)
 
 	ax[j].hist(sts.LAT, bins=25)
 	ax[j].set_xlabel("Latitude, degrees")
@@ -95,10 +102,13 @@ print(f"\nHistogram saved to {plt_file}")
 
 valid_stations_common = set(valid_stations["tn"]) & set(valid_stations["tx"])
 valid_stations_common = sorted(list(valid_stations_common))
-valid_stations_common = [str(x) for x in valid_stations_common]
 print(f"\nCommon valid stations: {len(valid_stations_common)}")
-sts_file = os.path.join(outdir, "stations_valid.txt")
-f = open(sts_file, "w")
-f.write("\n".join(valid_stations_common))
-f.close()
-print(f"List saved to {sts_file}")
+
+for data_id in ("tn", "tx"):
+	station_data[data_id] = station_data[data_id][
+	    station_data[data_id].STAID.isin(valid_stations_common)]
+	station_data[data_id] = station_data[data_id].reset_index(drop=True)
+assert station_data["tn"].equals(station_data["tx"])
+sts_file = os.path.join(outdir, f"station_data.txt")
+station_data["tn"].to_csv(sts_file, index=False)
+print(f"Station info written to {sts_file}")

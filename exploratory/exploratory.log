@@ -14,4 +14,4 @@ List of valid files saved to exploratory/filelist_tx.txt
 Histogram saved to exploratory/stations.png
 
 Common valid stations: 2064
-List saved to exploratory/stations_valid.txt
+Station info written to exploratory/station_data.txt
