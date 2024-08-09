@@ -3,20 +3,9 @@ import os
 import zipfile
 import pandas as pd
 import matplotlib.pyplot as plt
-from math import floor
 
+from common import read_datafile, convert_coord, DATE_START, DATE_END
 
-def convert_coord(x):
-	"""Convert latitude or longitude from degrees:minutes:seconds to degrees with decimals"""
-	x1 = x[1:].split(":")
-	x1 = [int(val) for val in x1]
-	res = x1[0] + x1[1]/60 + x1[2]/3600
-	assert floor(res)==x1[0]
-	return res
-
-
-startdate = "1980-01-01"
-enddate   = "2024-05-31"
 
 valid_stations = {}
 valid_files = {}
@@ -45,20 +34,13 @@ for j, data_id in enumerate(("tn", "tx")):
 
 	for i,file in enumerate(files):
 		print(f"Processing file {i+1}", end="\r")
-		f = io.TextIOWrapper(zf.open(file))
-		lines = f.read().split("\n")[20:]
-		assert lines[0].startswith("STAID, SOUID,    DATE,")
-		data = pd.read_csv(io.StringIO("\n".join(lines)))
-		data.columns = [x.strip() for x in data.columns]
-	
-		data.DATE = pd.to_datetime(data.DATE, format="%Y%m%d")
-		data = data[data.DATE >= startdate]
-		data = data[data.iloc[:,-1] != 9]
+		data = read_datafile(file, zf)
+		data = data[data.DATE >= DATE_START]
 		start, end = data.DATE.min(), data.DATE.max()
 		if pd.isnull(start) or pd.isnull(end):
 			continue
-		if ( end < pd.to_datetime(enddate)
-		  or start > pd.to_datetime(startdate)):
+		if ( end < pd.to_datetime(DATE_END)
+		  or start > pd.to_datetime(DATE_START)):
 			continue
 		station = data.STAID.unique()
 		assert len(station)==1, f"{file}: {station}"
@@ -112,3 +94,13 @@ assert station_data["tn"].equals(station_data["tx"])
 sts_file = os.path.join(outdir, f"station_data.txt")
 station_data["tn"].to_csv(sts_file, index=False)
 print(f"Station info written to {sts_file}")
+
+fig, ax = plt.subplots(figsize=(5, 4))
+ax.hist(station_data["tn"].LAT, bins=25)
+ax.set_xlabel("Latitude, degrees")
+ax.set_ylabel("Number of stations")
+ax.grid()
+plt_file2 = os.path.join(outdir, "stations_common.png")
+plt.savefig(plt_file2, dpi=300, bbox_inches="tight")
+plt.close()
+print(f"Histogram saved to {plt_file2}")
