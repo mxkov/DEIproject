@@ -1,0 +1,33 @@
+Code,Name,Number of stations
+SE,Sweden,301
+AT,Austria,276
+HR,Croatia,12
+FI,Finland,192
+FR,France,36
+DE,Germany,455
+HU,Hungary,11
+IS,Iceland,5
+RU,Russia,55
+DK,Denmark,13
+IE,Ireland,9
+NL,Netherlands,24
+IT,Italy,8
+NO,Norway,279
+LV,Latvia,27
+LU,Luxembourg,1
+PL,Poland,58
+RO,Romania,25
+SK,Slovakia,3
+SI,Slovenia,12
+ES,Spain,92
+CH,Switzerland,9
+GB,United Kingdom,54
+RS,Serbia,3
+EE,Estonia,25
+BA,Bosnia and Herzegovina,1
+GL,Greenland,9
+GR,Greece,7
+TR,Turkey,31
+UA,Ukraine,22
+SJ,Svalbard and Jan Mayen,2
+BG,Bulgaria,7
