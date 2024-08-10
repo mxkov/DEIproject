@@ -1,10 +1,16 @@
 import io
+import os
+import pathlib
 import pandas as pd
 from math import floor
 
 
 DATE_START = "1980-01-01"
 DATE_END   = "2024-05-31"
+
+PROJ_DIR = pathlib.Path(__file__).resolve().parents[1]
+DATA_DIR = os.path.join(PROJ_DIR, "data")
+EXPL_DIR = os.path.join(PROJ_DIR, "exploratory")
 
 
 def read_datafile(filename, zip_file,

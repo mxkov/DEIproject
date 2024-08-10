@@ -3,26 +3,26 @@ import os
 import pandas as pd
 import zipfile
 
-from common import read_datafile, DATE_START, DATE_END
+from common import (
+	read_datafile,
+	DATA_DIR, EXPL_DIR,
+	DATE_START, DATE_END
+)
 
 
-DATE_START = "1980-01-01"
-DATE_END   = "2024-05-31"
-
-
-stations = pd.read_csv("exploratory/station_data.txt", usecols=[0])
+stations = pd.read_csv(os.path.join(EXPL_DIR, "station_data.txt"), usecols=[0])
 stations = list(stations.STAID)
 
 percent_missing = {}
 fig, ax = plt.subplots(ncols=2, sharex=True, sharey=True, figsize=(10, 4))
 plt_title = {"tn": "Daily minimum temperature",
              "tx": "Daily maximum temperature"}
-plt_file = os.path.join("exploratory/missingness.png")
+plt_file = os.path.join(EXPL_DIR, "missingness.png")
 
 for j, data_id in enumerate(("tn", "tx")):
 	print(f"\nProcessing: {data_id}")
 
-	zip_file  = os.path.join("data", f"ECA_blend_{data_id}.zip")
+	zip_file  = os.path.join(DATA_DIR, f"ECA_blend_{data_id}.zip")
 	zf = zipfile.ZipFile(zip_file)
 	files = zf.namelist()[4:]
 	prefix = data_id.upper()+"_STAID"
@@ -35,7 +35,8 @@ for j, data_id in enumerate(("tn", "tx")):
 			continue
 
 		print(f"Processing file {i+1}", end="\r")
-		data = read_datafile(file, zf, remove_missing=False, remove_suspect=False)
+		data = read_datafile(file, zf,
+		                     remove_missing=False, remove_suspect=False)
 
 		data = data[data.DATE >= DATE_START]
 		data = data[data.DATE <= DATE_END]

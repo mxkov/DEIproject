@@ -2,13 +2,15 @@ import os, sys
 import pandas as pd
 import zipfile
 
+from common import DATA_DIR, EXPL_DIR
+
 
 if len(sys.argv) < 2:
 	sys.exit("Missing required argument: extraction path")
 extract_root = sys.argv[1]
 os.makedirs(extract_root, exist_ok=True)
 
-stations = pd.read_csv("exploratory/station_data.txt", usecols=[0])
+stations = pd.read_csv(os.path.join(EXPL_DIR, "station_data.txt"), usecols=[0])
 stations = list(stations.STAID)
 
 for data_id in ("tn", "tx"):
@@ -17,7 +19,7 @@ for data_id in ("tn", "tx"):
 	extract_path = os.path.join(extract_root, data_id)
 	os.makedirs(extract_path, exist_ok=True)
 
-	zip_file  = os.path.join("data", f"ECA_blend_{data_id}.zip")
+	zip_file  = os.path.join(DATA_DIR, f"ECA_blend_{data_id}.zip")
 	zf = zipfile.ZipFile(zip_file)
 	zf.extract("stations.txt", path=extract_path)
 	files = zf.namelist()[4:]

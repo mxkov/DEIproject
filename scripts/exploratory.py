@@ -4,25 +4,28 @@ import zipfile
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from common import read_datafile, convert_coord, DATE_START, DATE_END
+from common import (
+	read_datafile, convert_coord,
+	DATA_DIR, EXPL_DIR,
+	DATE_START, DATE_END
+)
 
 
 valid_stations = {}
 valid_files = {}
 station_data = {}
-outdir = "exploratory"
-os.makedirs(outdir, exist_ok=True)
+os.makedirs(EXPL_DIR, exist_ok=True)
 
 fig, ax = plt.subplots(ncols=2, sharex=True, sharey=True, figsize=(10, 4))
 plt_title = {"tn": "Daily minimum temperature",
              "tx": "Daily maximum temperature"}
-plt_file = os.path.join(outdir, "stations.png")
+plt_file = os.path.join(EXPL_DIR, "stations.png")
 
 for j, data_id in enumerate(("tn", "tx")):
 	print(f"\nProcessing: {data_id}")
 
-	zip_file  = os.path.join("data", f"ECA_blend_{data_id}.zip")
-	fls_file  = os.path.join(outdir, f"filelist_{data_id}.txt")
+	zip_file  = os.path.join(DATA_DIR, f"ECA_blend_{data_id}.zip")
+	fls_file  = os.path.join(EXPL_DIR, f"filelist_{data_id}.txt")
 
 	valid_stations[data_id] = []
 	valid_files[data_id] = []
@@ -91,7 +94,7 @@ for data_id in ("tn", "tx"):
 	    station_data[data_id].STAID.isin(valid_stations_common)]
 	station_data[data_id] = station_data[data_id].reset_index(drop=True)
 assert station_data["tn"].equals(station_data["tx"])
-sts_file = os.path.join(outdir, f"station_data.txt")
+sts_file = os.path.join(EXPL_DIR, f"station_data.txt")
 station_data["tn"].to_csv(sts_file, index=False)
 print(f"Station info written to {sts_file}")
 
@@ -100,7 +103,7 @@ ax.hist(station_data["tn"].LAT, bins=25)
 ax.set_xlabel("Latitude, degrees")
 ax.set_ylabel("Number of stations")
 ax.grid()
-plt_file2 = os.path.join(outdir, "stations_common.png")
+plt_file2 = os.path.join(EXPL_DIR, "stations_common.png")
 plt.savefig(plt_file2, dpi=300, bbox_inches="tight")
 plt.close()
 print(f"Histogram saved to {plt_file2}")
