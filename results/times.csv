@@ -1,0 +1,10 @@
+mode,worker-nodes,vcpus-per-node,ram-per-node,time
+single,1,4,8,25
+single,1,8,16,15
+single,1,16,16,11
+multi,1,4,8,33
+multi,2,4,8,14
+multi,4,4,8,7.1
+multi,1,16,16,11
+multi,2,16,16,7.2
+multi,4,16,16,4.7
