@@ -10,7 +10,7 @@ if len(sys.argv) < 2:
 extract_root = sys.argv[1]
 os.makedirs(extract_root, exist_ok=True)
 
-stations = pd.read_csv(os.path.join(EXPL_DIR, "station_data.txt"), usecols=[0])
+stations = pd.read_csv(os.path.join(EXPL_DIR, "station_data.csv"), usecols=[0])
 stations = list(stations.STAID)
 
 for data_id in ("tn", "tx"):

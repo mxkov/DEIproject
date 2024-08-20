@@ -10,7 +10,7 @@ from common import (
 )
 
 
-stations = pd.read_csv(os.path.join(EXPL_DIR, "station_data.txt"), usecols=[0])
+stations = pd.read_csv(os.path.join(EXPL_DIR, "station_data.csv"), usecols=[0])
 stations = list(stations.STAID)
 
 percent_missing = {}

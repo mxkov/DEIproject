@@ -25,7 +25,6 @@ for j, data_id in enumerate(("tn", "tx")):
 	print(f"\nProcessing: {data_id}")
 
 	zip_file  = os.path.join(DATA_DIR, f"ECA_blend_{data_id}.zip")
-	fls_file  = os.path.join(EXPL_DIR, f"filelist_{data_id}.txt")
 
 	valid_stations[data_id] = []
 	valid_files[data_id] = []
@@ -51,11 +50,6 @@ for j, data_id in enumerate(("tn", "tx")):
 		valid_files[data_id].append(file)
 
 	print(f"\nValid stations: {len(valid_stations[data_id])}")
-
-	f = open(fls_file, "w")
-	f.write("\n".join(valid_files[data_id]))
-	f.close()
-	print(f"List of valid files saved to {fls_file}")
 
 	f = io.TextIOWrapper(zf.open("stations.txt"))
 	lines = f.read().split("\n")
@@ -94,7 +88,7 @@ for data_id in ("tn", "tx"):
 	    station_data[data_id].STAID.isin(valid_stations_common)]
 	station_data[data_id] = station_data[data_id].reset_index(drop=True)
 assert station_data["tn"].equals(station_data["tx"])
-sts_file = os.path.join(EXPL_DIR, f"station_data.txt")
+sts_file = os.path.join(EXPL_DIR, f"station_data.csv")
 station_data["tn"].to_csv(sts_file, index=False)
 print(f"Station info written to {sts_file}")
 

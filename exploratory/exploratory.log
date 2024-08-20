@@ -3,16 +3,14 @@ Processing: tn
 Total files: 7477
 Processing file 7477
 Valid stations: 2169
-List of valid files saved to exploratory/filelist_tn.txt
 
 Processing: tx
 Total files: 7436
 Processing file 7436
 Valid stations: 2067
-List of valid files saved to exploratory/filelist_tx.txt
 
 Histogram saved to exploratory/stations.png
 
 Common valid stations: 2064
-Station info written to exploratory/station_data.txt
+Station info written to exploratory/station_data.csv
 Histogram saved to exploratory/stations_common.png
