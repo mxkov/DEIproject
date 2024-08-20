@@ -1,3 +1,5 @@
+"""Some shared functions & global variables"""
+
 import io
 import os
 import pathlib

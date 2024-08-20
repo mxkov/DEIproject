@@ -1,3 +1,18 @@
+"""Extracts the data archives.
+
+Arguments: extraction destination
+(directory will be created if doesn't exist).
+
+Reads:
+data/ECA_blend_tn.zip
+data/ECA_blend_tx.zip
+exploratory/station_data.csv
+
+Extracts the data files for stations listed in file
+exploratory/station_data.csv (produced by scripts/exploratory.py),
+plus extracts the station metadata file stations.txt.
+"""
+
 import os, sys
 import pandas as pd
 import zipfile

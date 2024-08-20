@@ -1,3 +1,17 @@
+"""Plots a histogram of % of missing / incomplete temperature data.
+
+Reads:
+data/ECA_blend_tn.zip
+data/ECA_blend_tx.zip
+exploratory/station_data.csv
+
+Writes:
+exploratory/missingness.png
+
+Only reads the data files for stations listed in file
+exploratory/station_data.csv (produced by scripts/exploratory.py).
+"""
+
 import matplotlib.pyplot as plt
 import os
 import pandas as pd

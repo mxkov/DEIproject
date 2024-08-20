@@ -1,3 +1,25 @@
+"""Some exploratory data analysis & data filtering.
+
+Reads:
+data/ECA_blend_tn.zip
+data/ECA_blend_tx.zip
+
+Writes:
+exploratory/station_data.csv
+exploratory/stations.png
+exploratory/stations_common.png
+
+- Finds stations that have the data between 1980-01-01 and 2024-05-31
+  (accounting for missing data).
+- Converts latitude & longitude from degrees:minutes:seconds to degrees.
+- Builds a latitude distribution of selected stations for TN and TX data
+  separately, saves to exploratory/stations.png.
+- Selects the stations that fulfill this condition for BOTH TN and TX,
+  writes them to exploratory/station_data.csv.
+- Builds a latitude distribution of this final selection of stations,
+  saves to exploratory/stations_common.png.
+"""
+
 import io
 import os
 import zipfile

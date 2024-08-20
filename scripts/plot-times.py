@@ -1,3 +1,15 @@
+"""Makes a figure illustrating results of computational experiments.
+
+Reads:
+results/times.csv
+
+Writes:
+results/times.png
+
+Note: the input file results/times.csv is not produced by any code
+in the repo and in this case was made manually.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
