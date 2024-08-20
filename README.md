@@ -32,3 +32,4 @@ Station selection in [Step 1](#preprocessing-and-analysis) was done on a standal
 	* pandas 2.0.3
 	* numpy 1.24.4
 	* matplotlib 3.7.5
+* Additionally, Python 3.10.12 with matplotlib 3.9.2 (required for [scripts/plot-times.py](/scripts/plot-times.py))
