@@ -16,7 +16,7 @@ Here are the main steps:
 1. Filter the data files to find stations that have foth TN and TX data between 1980-01-01 and 2024-05-31. This way 2064 stations were selected. Done by [scripts/exploratory.py](/scripts/exploratory.py).
 2. Extract selected station data with [scripts/extract.py](/scripts/extract.py).
 3. Run the analysis itself in [eca_trend.ipynb](/eca_trend.ipynb).
-4. Collect performance metrics (see [results/times.csv](/results/times.csv)), plot with [scripts/plot-times.py](/scripts/plot-times.py) (possibly adjusting the constants in the script).
+4. Collect performance metrics (see [results/times.csv](/results/times.csv)), plot with [scripts/plot-times.py](/scripts/plot-times.py) (possibly adjusting parameters in the nearby JSON file).
 
 
 ## Environment

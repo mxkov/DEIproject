@@ -1,0 +1,7 @@
+{
+  "data_points_single" : 3,
+  "data_points_multi" : 3,
+  "fig_size" : [8, 4],
+  "width_ratios" : [2, 3],
+  "bar_width" : 0.4
+}
